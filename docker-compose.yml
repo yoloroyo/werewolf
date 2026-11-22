@@ -1,0 +1,21 @@
+services:
+  web:
+    build: .
+    container_name: werewolf
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./db.sqlite3:/app/db.sqlite3
+      - ./media:/app/media
+
+  cloudbeaver:
+    image: dbeaver/cloudbeaver:latest
+    container_name: cloudbeaver
+    ports:
+      - "8978:8978"
+    volumes:
+      - ./db.sqlite3:/data/db.sqlite3:ro
+      - cloudbeaver_workspace:/opt/cloudbeaver/workspace
+
+volumes:
+  cloudbeaver_workspace:

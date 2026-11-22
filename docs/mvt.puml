@@ -1,0 +1,25 @@
+@startuml
+skinparam defaultFontSize 11
+hide circle
+
+node "Клиент\n(Веб-браузер)" as Client
+
+node "Сервер (Django)" as Server {
+  component "URL dispatcher" as URL
+  component "View" as View
+  component "Template" as Template
+  component "Model" as Model
+
+  URL --> View
+  View --> Template
+  View --> Model
+}
+
+database "База данных" as DB
+
+Client --> Server : HTTP-запрос
+Server --> Client : HTML-ответ
+Server --> DB : SQL-запрос
+DB --> Server : Данные
+
+@enduml

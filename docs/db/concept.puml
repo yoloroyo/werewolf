@@ -1,0 +1,131 @@
+@startuml
+skinparam linetype ortho
+hide empty members
+hide circle
+
+entity "Товар" as Product {
+  Название
+  Цена
+  Наличие
+  Описание
+  Фото
+}
+
+entity "Мотоцикл" as Motorcycle {
+  Категория
+  Год выпуска
+  Объём двигателя
+  Мощность
+  Масса
+  Цвет
+}
+
+entity "Экипировка" as Equipment {
+  Тип
+  Размер
+  Цвет
+}
+
+entity "Масло" as Oil {
+  Вязкость
+  Объём
+}
+
+entity "Шина" as Tire {
+  Диаметр
+}
+
+entity "Запчасть" as Part {
+  Тип
+}
+
+entity "Аксессуар" as Accessory {
+  Тип
+}
+
+entity "Бренд" as Brand {
+  Название
+  Логотип
+}
+
+entity "Категория товара" as ProductCategory {
+  Название
+}
+
+entity "Фотография товара" as ProductImage {
+  Изображение
+  Подпись
+}
+
+entity "Заказ" as Order {
+  ФИО
+  Телефон
+  Email
+  Адрес доставки
+  Комментарий
+  Статус
+  Сумма
+}
+
+entity "Позиция заказа" as OrderItem {
+  Название (снимок)
+  Цена
+  Количество
+}
+
+entity "Пользователь" as User {
+  Email
+  Пароль
+}
+
+entity "Профиль" as Profile {
+  ФИО
+  Телефон
+  Адрес
+}
+
+entity "Код подтверждения" as EmailConfirmation {
+  Код
+}
+
+entity "Резервирование" as CheckoutReservation {
+  Количество
+  Срок действия
+}
+
+entity "Отзыв" as Review {
+  Имя автора
+  Оценка
+  Текст
+}
+
+entity "Партнёр" as Partner {
+  Название
+  Логотип
+}
+
+Brand ||--o{ Product
+ProductCategory ||--o{ Product
+Product ||--o{ ProductImage
+Product ||--o{ OrderItem
+Product ||--o{ CheckoutReservation
+Product ||--|| Motorcycle
+Product ||--|| Equipment
+Product ||--|| Oil
+Product ||--|| Tire
+Product ||--|| Part
+Product ||--|| Accessory
+Order ||--|{ OrderItem
+User ||--o{ Order
+User ||--|| Profile
+User ||--|| EmailConfirmation
+
+' Невидимые стрелки лишь для выравнивая диаграммы
+Brand -[hidden]-> Product
+ProductCategory -[hidden]-> Product
+Order -[hidden]-> Product
+User -[hidden]-> Product
+ProductImage -[hidden]-> Product
+Oil -[hidden]-> Part
+
+@enduml

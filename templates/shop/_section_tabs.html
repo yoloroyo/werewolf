@@ -1,0 +1,7 @@
+<ul class="nav nav-pills section-tabs mb-4 flex-wrap">
+    {% for c in product_categories %}
+        <li class="nav-item">
+            <a class="nav-link {% if active_section == c.slug %}active{% endif %}" href="{% url 'shop:products' c.slug %}">{{ c.name }}</a>
+        </li>
+    {% endfor %}
+</ul>

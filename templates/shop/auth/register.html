@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Регистрация - Werewolf{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <div class="card">
+            <div class="card-body p-4">
+                <h2 class="mb-4 text-center">Регистрация</h2>
+                <form method="post">
+                    {% csrf_token %}
+                    {% include 'shop/auth/_form.html' %}
+                    <button class="btn btn-primary w-100 btn-lg">Создать аккаунт</button>
+                </form>
+                <div class="text-center mt-3 text-body-secondary">
+                    Уже есть аккаунт? <a href="{% url 'shop:login' %}">Войти</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

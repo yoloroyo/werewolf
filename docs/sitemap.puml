@@ -1,0 +1,32 @@
+@startwbs
+skinparam defaultFontName Arial
+skinparam shadowing false
+skinparam wbsDiagram {
+    BackgroundColor White
+    BorderColor Black
+    FontColor Black
+    ArrowColor Black
+}
+
+* Клиентское веб-приложение
+** Публичные страницы
+*** Каталог раздела\n/shop/{category_slug}/
+**** Карточка товара\n/product/{slug}/
+*** О нас\n/about/
+*** Отзывы\n/reviews/
+*** Корзина\n/cart/
+**** Оформление заказа\n/checkout/
+*** Вход\n/login/
+*** Регистрация\n/register/
+**** Подтверждение email\n/confirm/
+** Защищённые страницы\n(требуют авторизации)
+*** Личный кабинет\n/profile/
+*** Панель администратора\n/admin/
+**** Пользователи и группы\n/admin/auth/
+**** Товары\n/admin/shop/product/
+**** Заказы\n/admin/shop/order/
+**** Отзывы\n/admin/shop/review/
+**** Справочники\n(бренды, категории, партнёры, типы)
+**** Резервы оформления\n/admin/shop/checkoutreservation/
+
+@endwbs

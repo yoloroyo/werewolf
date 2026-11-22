@@ -1,0 +1,224 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ category.name }} - Werewolf{% endblock %}
+
+{% block content %}
+<section class="hero rounded-4 p-4 p-md-5 mb-4 text-white">
+    <div class="row align-items-center">
+        <div class="col-md-8">
+            <h1 class="display-4 fw-bold mb-2">UNLEASH THE BEAST</h1>
+            <p class="lead mb-0 opacity-75">Werewolf - мотоциклы для тех, кто живёт ночью.</p>
+        </div>
+        <div class="col-md-4 d-none d-md-block text-center">
+            <img src="{% static 'shop/wolf.svg' %}" alt="" width="160" height="160" style="opacity:.85">
+        </div>
+    </div>
+</section>
+
+{% with active_section=category.slug %}{% include 'shop/_section_tabs.html' %}{% endwith %}
+
+<h1 class="mb-4">{{ category.name }}</h1>
+
+<div class="row g-4">
+    <aside class="col-lg-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title mb-3"><i class="bi bi-funnel"></i> Фильтры</h5>
+                <form method="get">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Поиск</label>
+                        <div class="input-group">
+                            <input type="search" name="q" value="{{ query }}" class="form-control" placeholder="Название, бренд...">
+                            <button class="btn btn-outline-light" type="submit"><i class="bi bi-search"></i></button>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Бренд</label>
+                        <select class="form-select" name="brand" onchange="this.form.submit()">
+                            <option value="">Все бренды</option>
+                            {% for b in brands %}
+                                <option value="{{ b.slug }}" {% if selected_brand == b.slug %}selected{% endif %}>{{ b.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    {% if subclass == 'motorcycle' %}
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Категория</label>
+                            <select class="form-select" name="moto_category" onchange="this.form.submit()">
+                                <option value="">Любая</option>
+                                {% for mc in moto_categories %}
+                                    <option value="{{ mc.slug }}" {% if selected_moto_category == mc.slug %}selected{% endif %}>{{ mc.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    {% elif subclass == 'equipment' %}
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Тип</label>
+                            <select class="form-select" name="type" onchange="this.form.submit()">
+                                <option value="">Любой</option>
+                                {% for t in equipment_types %}
+                                    <option value="{{ t.slug }}" {% if selected_type == t.slug %}selected{% endif %}>{{ t.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Размер</label>
+                            <select class="form-select" name="size" onchange="this.form.submit()">
+                                <option value="">Любой</option>
+                                {% for s in sizes %}
+                                    <option value="{{ s }}" {% if selected_size == s %}selected{% endif %}>{{ s }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Цвет</label>
+                            <select class="form-select" name="color" onchange="this.form.submit()">
+                                <option value="">Любой</option>
+                                {% for c in colors %}
+                                    <option value="{{ c }}" {% if selected_color == c %}selected{% endif %}>{{ c }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    {% elif subclass == 'oil' %}
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Вязкость</label>
+                            <select class="form-select" name="viscosity" onchange="this.form.submit()">
+                                <option value="">Любая</option>
+                                {% for v in viscosities %}
+                                    <option value="{{ v }}" {% if selected_viscosity == v %}selected{% endif %}>{{ v }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Объём, мл</label>
+                            <select class="form-select" name="volume" onchange="this.form.submit()">
+                                <option value="">Любой</option>
+                                {% for v in volumes %}
+                                    <option value="{{ v }}" {% if selected_volume == v|stringformat:'s' %}selected{% endif %}>{{ v }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    {% elif subclass == 'part' %}
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Тип</label>
+                            <select class="form-select" name="part_type" onchange="this.form.submit()">
+                                <option value="">Любой</option>
+                                {% for t in part_types %}
+                                    <option value="{{ t.slug }}" {% if selected_part_type == t.slug %}selected{% endif %}>{{ t.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    {% elif subclass == 'accessory' %}
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Тип</label>
+                            <select class="form-select" name="accessory_type" onchange="this.form.submit()">
+                                <option value="">Любой</option>
+                                {% for t in accessory_types %}
+                                    <option value="{{ t.slug }}" {% if selected_accessory_type == t.slug %}selected{% endif %}>{{ t.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    {% elif subclass == 'tire' %}
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Диаметр</label>
+                            <select class="form-select" name="diameter" onchange="this.form.submit()">
+                                <option value="">Любой</option>
+                                {% for d in diameters %}
+                                    <option value="{{ d }}" {% if selected_diameter == d|stringformat:'s' %}selected{% endif %}>{{ d }}"</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    {% endif %}
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Сортировка</label>
+                        <select class="form-select" name="sort" onchange="this.form.submit()">
+                            <option value="-created_at" {% if sort == '-created_at' %}selected{% endif %}>Сначала новые</option>
+                            <option value="price" {% if sort == 'price' %}selected{% endif %}>Сначала дешевле</option>
+                            <option value="-price" {% if sort == '-price' %}selected{% endif %}>Сначала дороже</option>
+                            {% if subclass == 'motorcycle' %}
+                                <option value="-year" {% if sort == '-year' %}selected{% endif %}>Сначала новее</option>
+                                <option value="year" {% if sort == 'year' %}selected{% endif %}>Сначала старее</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                    <a href="{% url 'shop:products' category.slug %}" class="btn btn-outline-secondary w-100">Сбросить</a>
+                </form>
+            </div>
+        </div>
+    </aside>
+
+    <section class="col-lg-9">
+{% if products %}
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3">
+        {% for p in products %}
+            <div class="col">
+                <div class="card h-100 shadow-sm moto-card">
+                    <a href="{{ p.get_absolute_url }}" class="text-decoration-none text-reset">
+                        {% if p.main_image %}
+                            <img src="{{ p.main_image.url }}" class="card-img-top moto-thumb" alt="{{ p }}">
+                        {% else %}
+                            <div class="moto-thumb d-flex align-items-center justify-content-center bg-body-tertiary">
+                                <i class="bi bi-image fs-1 text-body-secondary"></i>
+                            </div>
+                        {% endif %}
+                    </a>
+                    <div class="card-body d-flex flex-column">
+                        <div class="small text-body-secondary">
+                            {% if p.brand %}{{ p.brand.name }}{% endif %}
+                            {% if subclass == 'motorcycle' %}{% if p.brand %} · {% endif %}{{ p.year }}{% endif %}
+                        </div>
+                        <h5 class="card-title mt-1">
+                            <a href="{{ p.get_absolute_url }}" class="text-decoration-none text-reset">{{ p.name }}</a>
+                        </h5>
+                        {% if subclass == 'motorcycle' %}
+                            <div class="mb-2 small text-body-secondary">
+                                <i class="bi bi-speedometer2"></i> {{ p.engine_cc }} см³
+                                {% if p.power_hp %}· {{ p.power_hp }} л.с.{% endif %}
+                            </div>
+                        {% endif %}
+                        <div class="mt-auto d-flex align-items-center justify-content-between">
+                            <span class="fs-5 fw-bold">{{ p.price }} ₽</span>
+                            {% if p.in_stock %}
+                                <form method="post" action="{% url 'shop:cart_add' p.pk %}"
+                                      hx-post="{% url 'shop:cart_add' p.pk %}"
+                                      hx-target="#cart-badge" hx-swap="outerHTML">
+                                    {% csrf_token %}
+                                    <button class="btn btn-sm btn-primary"><i class="bi bi-cart-plus"></i></button>
+                                </form>
+                            {% else %}
+                                <span class="badge text-bg-secondary">Нет</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    {% if page.paginator.num_pages > 1 %}
+        <nav class="mt-4" aria-label="Пагинация">
+            <ul class="pagination justify-content-center">
+                {% if page.has_previous %}
+                    <li class="page-item"><a class="page-link" href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ page.previous_page_number }}">&laquo;</a></li>
+                {% else %}<li class="page-item disabled"><span class="page-link">&laquo;</span></li>{% endif %}
+                {% for num in page.paginator.page_range %}
+                    {% if num == page.number %}
+                        <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                    {% elif num >= page.number|add:'-2' and num <= page.number|add:'2' %}
+                        <li class="page-item"><a class="page-link" href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ num }}">{{ num }}</a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if page.has_next %}
+                    <li class="page-item"><a class="page-link" href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ page.next_page_number }}">&raquo;</a></li>
+                {% else %}<li class="page-item disabled"><span class="page-link">&raquo;</span></li>{% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+{% else %}
+    <div class="alert alert-info">Ничего не найдено.</div>
+{% endif %}
+    </section>
+</div>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}Отзывы - Werewolf{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Отзывы</h1>
+
+<div class="row g-4">
+    <div class="col-lg-7">
+        {% if reviews %}
+            {% for r in reviews %}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <strong>{{ r.author_name }}</strong>
+                            <span class="text-warning">
+                                {% for i in "12345"|make_list %}
+                                    {% if forloop.counter <= r.rating %}★{% else %}<span class="text-body-secondary">★</span>{% endif %}
+                                {% endfor %}
+                            </span>
+                        </div>
+                        <p class="mb-1" style="white-space:pre-wrap;">{{ r.text }}</p>
+                        <small class="text-body-secondary">{{ r.created_at|date:"d.m.Y H:i" }}</small>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="alert alert-info">Пока нет отзывов. Будь первым!</div>
+        {% endif %}
+    </div>
+
+    <div class="col-lg-5">
+        <div class="card sticky-lg-top" style="top:80px;">
+            <div class="card-body">
+                <h4 class="mb-3">Оставить отзыв</h4>
+                <form method="post">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.errors %}
+                                <div class="text-danger small mt-1">{{ field.errors|join:', ' }}</div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    <button class="btn btn-primary w-100">
+                        <i class="bi bi-send"></i> Отправить
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

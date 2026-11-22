@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}Корзина - Werewolf{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Корзина</h1>
+
+{% if cart|length %}
+    <div class="card">
+        <div class="table-responsive">
+            <table class="table align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Товар</th>
+                        <th class="text-end">Цена</th>
+                        <th style="width:160px;">Кол-во</th>
+                        <th class="text-end">Сумма</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in cart %}
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center gap-3">
+                                    {% if item.object.main_image %}
+                                        <img src="{{ item.object.main_image.url }}" style="width:70px;height:50px;object-fit:cover;" class="rounded">
+                                    {% endif %}
+                                    <div>
+                                        <a href="{{ item.object.get_absolute_url }}" class="text-decoration-none text-reset fw-semibold">
+                                            {{ item.object }}
+                                        </a>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="text-end">{{ item.price }} ₽</td>
+                            <td>
+                                <form method="post" action="{% url 'shop:cart_update' item.pk %}" class="d-flex gap-1">
+                                    {% csrf_token %}
+                                    <input type="number" name="quantity" min="1" value="{{ item.quantity }}" class="form-control form-control-sm">
+                                    <button class="btn btn-sm btn-outline-secondary"><i class="bi bi-check2"></i></button>
+                                </form>
+                            </td>
+                            <td class="text-end fw-semibold">{{ item.subtotal }} ₽</td>
+                            <td class="text-end">
+                                <form method="post" action="{% url 'shop:cart_remove' item.pk %}">
+                                    {% csrf_token %}
+                                    <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="3" class="text-end">Итого:</th>
+                        <th class="text-end fs-5">{{ cart.total }} ₽</th>
+                        <th></th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between mt-3">
+        <a href="{% url 'shop:home' %}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Продолжить покупки</a>
+        <a href="{% url 'shop:checkout' %}" class="btn btn-success btn-lg">Оформить заказ <i class="bi bi-arrow-right"></i></a>
+    </div>
+{% else %}
+    <div class="alert alert-info">
+        Корзина пуста. <a href="{% url 'shop:home' %}">Перейти в каталог</a>.
+    </div>
+{% endif %}
+{% endblock %}

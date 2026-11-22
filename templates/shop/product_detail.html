@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ product }} - Werewolf{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'shop:products' product.category.slug %}">{{ product.category.name }}</a></li>
+        <li class="breadcrumb-item active">{{ product.name }}</li>
+    </ol>
+</nav>
+
+<div class="row g-4">
+    <div class="col-lg-6">
+        {% if product.main_image %}
+            <img src="{{ product.main_image.url }}" class="img-fluid rounded shadow-sm mb-3" alt="{{ product }}">
+        {% else %}
+            <div class="bg-body-tertiary rounded d-flex align-items-center justify-content-center" style="height:360px;">
+                <i class="bi bi-image display-1 text-body-secondary"></i>
+            </div>
+        {% endif %}
+
+        {% if product.images.count > 1 %}
+            <div class="row row-cols-4 g-2">
+                {% for img in product.images.all %}
+                    <div class="col">
+                        <img src="{{ img.image.url }}" class="img-fluid rounded" alt="{{ img.caption }}" style="aspect-ratio:1;object-fit:cover;">
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="col-lg-6">
+        <div class="small text-body-secondary">
+            {% if product.brand %}{{ product.brand.name }}{% endif %}
+            {% if is_motorcycle %}{% if product.brand %} · {% endif %}{{ product.year }}{% endif %}
+        </div>
+        <h1 class="mb-3">{{ product.name }}</h1>
+
+        <div class="d-flex align-items-center gap-3 mb-3">
+            <span class="display-6 fw-bold">{{ product.price }} ₽</span>
+            {% if product.in_stock %}
+                <span class="badge text-bg-success">В наличии: {{ product.stock }} шт.</span>
+            {% else %}
+                <span class="badge text-bg-secondary">Нет в наличии</span>
+            {% endif %}
+        </div>
+
+        {% if product.in_stock %}
+            <form method="post" action="{% url 'shop:cart_add' product.pk %}" class="mb-4">
+                {% csrf_token %}
+                <button class="btn btn-primary btn-lg">
+                    <i class="bi bi-cart-plus"></i> Добавить в корзину
+                </button>
+            </form>
+        {% endif %}
+
+        {% if is_motorcycle %}
+            <h5>Характеристики</h5>
+            <table class="table table-sm">
+                <tr><th>Категория</th><td>{{ product.moto_category.name }}</td></tr>
+                <tr><th>Год</th><td>{{ product.year }}</td></tr>
+                <tr><th>Объём двигателя</th><td>{{ product.engine_cc }} см³</td></tr>
+                {% if product.power_hp %}<tr><th>Мощность</th><td>{{ product.power_hp }} л.с.</td></tr>{% endif %}
+                {% if product.weight_kg %}<tr><th>Масса</th><td>{{ product.weight_kg }} кг</td></tr>{% endif %}
+                {% if product.color %}<tr><th>Цвет</th><td>{{ product.color }}</td></tr>{% endif %}
+            </table>
+        {% endif %}
+
+        {% if product.description %}
+            <h5>Описание</h5>
+            <p style="white-space:pre-wrap;">{{ product.description }}</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

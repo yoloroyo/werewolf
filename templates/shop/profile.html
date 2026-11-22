@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}Профиль - Werewolf{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Профиль</h1>
+
+<div class="row g-4">
+    <div class="col-lg-5">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="mb-3">Данные для заказов</h4>
+                <div class="small text-body-secondary mb-3">
+                    <i class="bi bi-envelope"></i> {{ user.email }}
+                </div>
+                <form method="post">
+                    {% csrf_token %}
+                    {% include 'shop/auth/_form.html' %}
+                    <button class="btn btn-primary">Сохранить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-7">
+        <h4 class="mb-3">История заказов</h4>
+        {% if orders %}
+            {% for order in orders %}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <strong>Заказ #{{ order.pk }}</strong>
+                            <span class="badge text-bg-info">{{ order.get_status_display }}</span>
+                        </div>
+                        <div class="small text-body-secondary mb-2">{{ order.created_at|date:"d.m.Y H:i" }}</div>
+                        <ul class="list-unstyled mb-2">
+                            {% for item in order.items.all %}
+                                <li>{{ item.display_name }} × {{ item.quantity }} <span class="text-body-secondary">({{ item.subtotal }} ₽)</span></li>
+                            {% endfor %}
+                        </ul>
+                        <div class="d-flex justify-content-between">
+                            <span class="text-body-secondary">Итого:</span>
+                            <strong>{{ order.total }} ₽</strong>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="alert alert-info">Пока нет заказов. <a href="{% url 'shop:home' %}">В каталог</a>.</div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

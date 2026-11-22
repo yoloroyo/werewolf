@@ -1,0 +1,236 @@
+@startuml
+skinparam linetype ortho
+skinparam defaultFontSize 15
+skinparam nodesep 10
+skinparam ranksep 60
+hide empty members
+hide circle
+
+entity "shop_brand" as Brand {
+  id : integer <<PK>>
+  --
+  name : varchar <<NN>>
+  slug : varchar <<NN, UQ>>
+  logo : varchar
+}
+
+entity "shop_motocategory" as MotoCategory {
+  id : integer <<PK>>
+  --
+  name : varchar <<NN>>
+  slug : varchar <<NN, UQ>>
+}
+
+entity "shop_productcategory" as ProductCategory {
+  id : integer <<PK>>
+  --
+  name : varchar <<NN>>
+  slug : varchar <<NN, UQ>>
+}
+
+entity "shop_product" as Product {
+  id : integer <<PK>>
+  --
+  category_id : bigint <<FK, NN>>
+  brand_id : bigint <<FK>>
+  name : varchar <<NN>>
+  slug : varchar <<NN, UQ>>
+  price : decimal <<NN>>
+  stock : integer unsigned <<NN>>
+  short_description : varchar <<NN>>
+  description : text <<NN>>
+  is_active : bool <<NN>>
+  created_at : datetime <<NN>>
+}
+
+entity "shop_productimage" as ProductImage {
+  id : integer <<PK>>
+  --
+  product_id : bigint <<FK, NN>>
+  image : varchar <<NN>>
+  caption : varchar <<NN>>
+}
+
+entity "shop_motorcycle" as Motorcycle {
+  product_ptr_id : bigint <<PK, FK>>
+  --
+  moto_category_id : bigint <<FK, NN>>
+  year : integer unsigned <<NN>>
+  engine_cc : integer unsigned <<NN>>
+  power_hp : integer unsigned
+  weight_kg : integer unsigned
+  color : varchar <<NN>>
+}
+
+entity "shop_equipment" as Equipment {
+  product_ptr_id : bigint <<PK, FK>>
+  --
+  equipment_type_id : bigint <<FK, NN>>
+  size : varchar <<NN>>
+  color : varchar <<NN>>
+}
+
+entity "shop_equipmenttype" as EquipmentType {
+  id : integer <<PK>>
+  --
+  name : varchar <<NN>>
+  slug : varchar <<NN, UQ>>
+}
+
+entity "shop_oil" as Oil {
+  product_ptr_id : bigint <<PK, FK>>
+  --
+  viscosity : varchar <<NN>>
+  volume_ml : integer unsigned
+}
+
+entity "shop_tire" as Tire {
+  product_ptr_id : bigint <<PK, FK>>
+  --
+  diameter : smallint unsigned
+}
+
+entity "shop_part" as Part {
+  product_ptr_id : bigint <<PK, FK>>
+  --
+  part_type_id : bigint <<FK, NN>>
+}
+
+entity "shop_parttype" as PartType {
+  id : integer <<PK>>
+  --
+  name : varchar <<NN>>
+  slug : varchar <<NN, UQ>>
+}
+
+entity "shop_accessory" as Accessory {
+  product_ptr_id : bigint <<PK, FK>>
+  --
+  accessory_type_id : bigint <<FK, NN>>
+}
+
+entity "shop_accessorytype" as AccessoryType {
+  id : integer <<PK>>
+  --
+  name : varchar <<NN>>
+  slug : varchar <<NN, UQ>>
+}
+
+entity "shop_order" as Order {
+  id : integer <<PK>>
+  --
+  user_id : integer <<FK>>
+  full_name : varchar <<NN>>
+  phone : varchar <<NN>>
+  email : varchar <<NN>>
+  address : varchar <<NN>>
+  comment : text <<NN>>
+  status : varchar <<NN>>
+  total : decimal <<NN>>
+  created_at : datetime <<NN>>
+}
+
+entity "shop_orderitem" as OrderItem {
+  id : integer <<PK>>
+  --
+  order_id : bigint <<FK, NN>>
+  product_id : bigint <<FK>>
+  name_snapshot : varchar <<NN>>
+  price : decimal <<NN>>
+  quantity : integer unsigned <<NN>>
+}
+
+entity "auth_user" as User {
+  id : integer <<PK>>
+  --
+  password : varchar <<NN>>
+  last_login : datetime
+  is_superuser : bool <<NN>>
+  username : varchar <<NN, UQ>>
+  first_name : varchar <<NN>>
+  last_name : varchar <<NN>>
+  email : varchar <<NN>>
+  is_staff : bool <<NN>>
+  is_active : bool <<NN>>
+  date_joined : datetime <<NN>>
+}
+
+entity "shop_profile" as Profile {
+  id : integer <<PK>>
+  --
+  user_id : integer <<FK, NN, UQ>>
+  full_name : varchar <<NN>>
+  phone : varchar <<NN>>
+  address : varchar <<NN>>
+}
+
+entity "shop_emailconfirmation" as EmailConfirmation {
+  id : integer <<PK>>
+  --
+  user_id : integer <<FK, NN, UQ>>
+  code : varchar <<NN>>
+  created_at : datetime <<NN>>
+}
+
+entity "shop_checkoutreservation" as CheckoutReservation {
+  id : integer <<PK>>
+  --
+  product_id : bigint <<FK, NN>>
+  session_key : varchar <<NN>>
+  quantity : integer unsigned <<NN>>
+  expires_at : datetime <<NN>>
+  created_at : datetime <<NN>>
+}
+
+entity "shop_review" as Review {
+  id : integer <<PK>>
+  --
+  author_name : varchar <<NN>>
+  rating : smallint unsigned <<NN>>
+  text : text <<NN>>
+  created_at : datetime <<NN>>
+}
+
+entity "shop_partner" as Partner {
+  id : integer <<PK>>
+  --
+  name : varchar <<NN>>
+  logo : varchar <<NN>>
+}
+
+Brand ||--o{ Product
+ProductCategory ||--o{ Product
+Product ||--o{ ProductImage
+Product ||--o{ OrderItem
+Product ||--o{ CheckoutReservation
+Product ||--|| Motorcycle
+Product ||--|| Equipment
+Product ||--|| Oil
+Product ||--|| Tire
+Product ||--|| Part
+Product ||--|| Accessory
+MotoCategory ||--o{ Motorcycle
+EquipmentType ||--o{ Equipment
+PartType ||--o{ Part
+AccessoryType ||--o{ Accessory
+Order ||--|{ OrderItem
+User ||--o{ Order
+User ||--|| Profile
+User ||--|| EmailConfirmation
+
+' Невидимые стрелки лишь для выравнивания диаграммы
+Motorcycle -[hidden]d- Oil
+Oil -[hidden]d- Part
+Equipment -[hidden]d- Tire
+Tire -[hidden]d- Accessory
+MotoCategory -[hidden]d- PartType
+EquipmentType -[hidden]d- AccessoryType
+Brand -[hidden]d- ProductCategory
+Order -[hidden]d- OrderItem
+OrderItem -[hidden]d- CheckoutReservation
+User -[hidden]d- Profile
+Profile -[hidden]d- EmailConfirmation
+ProductImage -[hidden]d- Review
+Review -[hidden]d- Partner
+
+@enduml

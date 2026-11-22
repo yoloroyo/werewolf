@@ -1,0 +1,218 @@
+@startuml
+skinparam linetype ortho
+skinparam defaultFontSize 15
+skinparam nodesep 10
+skinparam ranksep 60
+hide empty members
+hide circle
+
+entity "Бренд" as Brand {
+  ID : INTEGER <<PK>>
+  --
+  Название : VARCHAR(100)
+  Логотип : VARCHAR(100)
+}
+
+entity "Категория мотоцикла" as MotoCategory {
+  ID : INTEGER <<PK>>
+  --
+  Название : VARCHAR(100)
+}
+
+entity "Категория товара" as ProductCategory {
+  ID : INTEGER <<PK>>
+  --
+  Название : VARCHAR(100)
+}
+
+entity "Товар" as Product {
+  ID : INTEGER <<PK>>
+  --
+  ID Категории : BIGINT <<FK>>
+  ID Бренда : BIGINT <<FK>>
+  Название : VARCHAR(200)
+  Цена : DECIMAL
+  Наличие : INTEGER
+  Краткое описание : VARCHAR(255)
+  Описание : TEXT
+  Опубликован : BOOL
+  Дата создания : DATETIME
+}
+
+entity "Фотография товара" as ProductImage {
+  ID : INTEGER <<PK>>
+  --
+  ID Товара : BIGINT <<FK>>
+  Изображение : VARCHAR(100)
+  Подпись : VARCHAR(150)
+}
+
+entity "Мотоцикл" as Motorcycle {
+  ID Товара : BIGINT <<PK, FK>>
+  --
+  ID Категории мотоцикла : BIGINT <<FK>>
+  Год выпуска : INTEGER
+  Объём двигателя : INTEGER
+  Мощность : INTEGER
+  Масса : INTEGER
+  Цвет : VARCHAR(60)
+}
+
+entity "Экипировка" as Equipment {
+  ID Товара : BIGINT <<PK, FK>>
+  --
+  ID Типа экипировки : BIGINT <<FK>>
+  Размер : VARCHAR(20)
+  Цвет : VARCHAR(40)
+}
+
+entity "Тип экипировки" as EquipmentType {
+  ID : INTEGER <<PK>>
+  --
+  Название : VARCHAR(100)
+}
+
+entity "Масло" as Oil {
+  ID Товара : BIGINT <<PK, FK>>
+  --
+  Вязкость : VARCHAR(20)
+  Объём : INTEGER
+}
+
+entity "Шина" as Tire {
+  ID Товара : BIGINT <<PK, FK>>
+  --
+  Диаметр : SMALLINT
+}
+
+entity "Запчасть" as Part {
+  ID Товара : BIGINT <<PK, FK>>
+  --
+  ID Типа запчасти : BIGINT <<FK>>
+}
+
+entity "Тип запчасти" as PartType {
+  ID : INTEGER <<PK>>
+  --
+  Название : VARCHAR(100)
+}
+
+entity "Аксессуар" as Accessory {
+  ID Товара : BIGINT <<PK, FK>>
+  --
+  ID Типа аксессуара : BIGINT <<FK>>
+}
+
+entity "Тип аксессуара" as AccessoryType {
+  ID : INTEGER <<PK>>
+  --
+  Название : VARCHAR(100)
+}
+
+entity "Заказ" as Order {
+  ID : INTEGER <<PK>>
+  --
+  ID Пользователя : INTEGER <<FK>>
+  ФИО : VARCHAR(150)
+  Телефон : VARCHAR(30)
+  Email : VARCHAR(254)
+  Адрес доставки : VARCHAR(255)
+  Комментарий : TEXT
+  Статус : VARCHAR(20)
+  Сумма : DECIMAL
+  Дата создания : DATETIME
+}
+
+entity "Позиция заказа" as OrderItem {
+  ID : INTEGER <<PK>>
+  --
+  ID Заказа : BIGINT <<FK>>
+  ID Товара : BIGINT <<FK>>
+  Название (снимок) : VARCHAR(255)
+  Цена : DECIMAL
+  Количество : INTEGER
+}
+
+entity "Пользователь" as User {
+  ID : INTEGER <<PK>>
+}
+
+entity "Профиль" as Profile {
+  ID : INTEGER <<PK>>
+  --
+  ID Пользователя : INTEGER <<FK>>
+  ФИО : VARCHAR(150)
+  Телефон : VARCHAR(30)
+  Адрес : VARCHAR(255)
+}
+
+entity "Код подтверждения" as EmailConfirmation {
+  ID : INTEGER <<PK>>
+  --
+  ID Пользователя : INTEGER <<FK>>
+  Код : VARCHAR(6)
+  Дата создания : DATETIME
+}
+
+entity "Резервирование" as CheckoutReservation {
+  ID : INTEGER <<PK>>
+  --
+  ID Товара : BIGINT <<FK>>
+  Ключ сессии : VARCHAR(40)
+  Количество : INTEGER
+  Срок действия : DATETIME
+  Дата создания : DATETIME
+}
+
+entity "Отзыв" as Review {
+  ID : INTEGER <<PK>>
+  --
+  Имя автора : VARCHAR(100)
+  Оценка : SMALLINT
+  Текст : TEXT
+  Дата создания : DATETIME
+}
+
+entity "Партнёр" as Partner {
+  ID : INTEGER <<PK>>
+  --
+  Название : VARCHAR(100)
+  Логотип : VARCHAR(100)
+}
+
+Brand ||--o{ Product
+ProductCategory ||--o{ Product
+Product ||--o{ ProductImage
+Product ||--o{ OrderItem
+Product ||--o{ CheckoutReservation
+Product ||--|| Motorcycle
+Product ||--|| Equipment
+Product ||--|| Oil
+Product ||--|| Tire
+Product ||--|| Part
+Product ||--|| Accessory
+MotoCategory ||--o{ Motorcycle
+EquipmentType ||--o{ Equipment
+PartType ||--o{ Part
+AccessoryType ||--o{ Accessory
+Order ||--|{ OrderItem
+User ||--o{ Order
+User ||--|| Profile
+User ||--|| EmailConfirmation
+
+' Невидимые стрелки лишь для выравнивая диаграммы
+Motorcycle -[hidden]d- Oil
+Oil -[hidden]d- Part
+Equipment -[hidden]d- Tire
+Tire -[hidden]d- Accessory
+MotoCategory -[hidden]d- PartType
+EquipmentType -[hidden]d- AccessoryType
+Brand -[hidden]d- ProductCategory
+Order -[hidden]d- OrderItem
+OrderItem -[hidden]d- CheckoutReservation
+User -[hidden]d- Profile
+Profile -[hidden]d- EmailConfirmation
+ProductImage -[hidden]d- Review
+Review -[hidden]d- Partner
+
+@enduml

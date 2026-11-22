@@ -1,0 +1,46 @@
+@startuml
+skinparam defaultFontSize 11
+skinparam linetype ortho
+skinparam componentStyle rectangle
+skinparam nodesep 50
+skinparam ranksep 80
+hide circle
+
+package "Werewolf" {
+
+  package "motoshop" {
+    [settings.py] as Settings
+    [urls.py] as RootURLs
+  }
+
+  package "shop" {
+    [urls.py] as URLs
+    [views.py] as Views
+    [forms.py] as Forms
+    [models.py] as Models
+    [cart.py] as Cart
+    [auth_backends.py] as AuthBackend
+    [admin.py] as AdminCfg
+    [context_processors.py] as Ctx
+  }
+
+  package "templates" {
+    [templates/base.html] as Base
+    [templates/shop/] as Pages
+  }
+
+}
+
+RootURLs --> URLs
+URLs --> Views
+Views --> Forms
+Views --> Models
+Views --> Cart
+Views --> Pages
+AdminCfg --> Models
+AuthBackend --> Models
+Ctx --> Cart
+Ctx --> Pages
+Pages --> Base
+
+@enduml

@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}О нас - Werewolf{% endblock %}
+
+{% block content %}
+<section class="hero rounded-4 p-4 p-md-5 mb-5 text-white text-center">
+    <img src="{% static 'shop/wolf.svg' %}" alt="" width="120" height="120" class="mb-3" style="opacity:.9">
+    <h1 class="display-4 fw-bold mb-2">О нас</h1>
+    <p class="lead opacity-75 mb-0">Мы продаём мотоциклы. Остальное - детали.</p>
+</section>
+
+<div class="row g-4 mb-5">
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <i class="bi bi-fire text-warning fs-1"></i>
+                <h3 class="mt-2">Наша история</h3>
+                <p class="text-body-secondary mb-0">
+                    Werewolf появился в 2024-м из простой идеи: мотоцикл - это не транспорт,
+                    а характер. Мы собрали команду райдеров и механиков, которые знают,
+                    чем "Street Glide" отличается от "Road King" без шпаргалки.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <i class="bi bi-shield-check text-success fs-1"></i>
+                <h3 class="mt-2">Что мы делаем</h3>
+                <p class="text-body-secondary mb-0">
+                    Продаём мотоциклы ведущих мировых брендов - Harley-Davidson, Yamaha,
+                    Honda, Ducati, Kawasaki. Только официальные поставки, полная гарантия,
+                    сервис в собственном центре.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 text-center mb-5">
+    <div class="col-md-4">
+        <div class="p-3">
+            <div class="display-3 fw-bold text-info">{{ sold_count }}</div>
+            <div class="text-body-secondary">мотоциклов продано</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="p-3">
+            <div class="display-3 fw-bold text-warning">{{ brands_count }}</div>
+            <div class="text-body-secondary">брендов в наличии</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="p-3">
+            <div class="display-3 fw-bold text-success">{{ avg_rating }}<small class="fs-2"> ★</small></div>
+            <div class="text-body-secondary">средняя оценка</div>
+        </div>
+    </div>
+</div>
+
+{% if partners %}
+    <section class="mb-5">
+        <h3 class="text-center mb-4">Нам доверяют</h3>
+        <div class="partners">
+            {% for p in partners %}
+                <img src="{{ p.logo.url }}" alt="{{ p.name }}" class="partner-logo" title="{{ p.name }}">
+            {% endfor %}
+        </div>
+    </section>
+{% endif %}
+
+<div class="card">
+    <div class="card-body">
+        <h3 class="mb-3"><i class="bi bi-geo-alt-fill text-danger"></i> Контакты</h3>
+        <div class="row g-3">
+            <div class="col-md-4">
+                <div class="text-body-secondary small">Адрес</div>
+                <div>г. Киев, ул. Байковая 42</div>
+            </div>
+            <div class="col-md-4">
+                <div class="text-body-secondary small">Телефон</div>
+                <div>+380 (44) 123-45-67</div>
+            </div>
+            <div class="col-md-4">
+                <div class="text-body-secondary small">Email</div>
+                <div>howl@werewolf.moto</div>
+            </div>
+            <div class="col-md-4">
+                <div class="text-body-secondary small">Время работы</div>
+                <div>Пн-Сб: 10:00 - 20:00</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
