@@ -7,177 +7,177 @@ hide empty members
 hide circle
 
 entity "Бренд" as Brand {
-  ID : INTEGER <<PK>>
+  ID : integer <<PK>>
   --
-  Название : VARCHAR(100)
-  Логотип : VARCHAR(100)
+  Название : varchar
+  Логотип : varchar
 }
 
 entity "Категория мотоцикла" as MotoCategory {
-  ID : INTEGER <<PK>>
+  ID : integer <<PK>>
   --
-  Название : VARCHAR(100)
+  Название : varchar
 }
 
 entity "Категория товара" as ProductCategory {
-  ID : INTEGER <<PK>>
+  ID : integer <<PK>>
   --
-  Название : VARCHAR(100)
+  Название : varchar
 }
 
 entity "Товар" as Product {
-  ID : INTEGER <<PK>>
+  ID : integer <<PK>>
   --
-  ID Категории : BIGINT <<FK>>
-  ID Бренда : BIGINT <<FK>>
-  Название : VARCHAR(200)
-  Цена : DECIMAL
-  Наличие : INTEGER
-  Краткое описание : VARCHAR(255)
-  Описание : TEXT
-  Опубликован : BOOL
-  Дата создания : DATETIME
+  ID Категории : bigint <<FK>>
+  ID Бренда : bigint <<FK>>
+  Название : varchar
+  Цена : decimal
+  Наличие : integer
+  Краткое описание : varchar
+  Описание : text
+  Опубликован : bool
+  Дата создания : datetime
 }
 
 entity "Фотография товара" as ProductImage {
-  ID : INTEGER <<PK>>
+  ID : integer <<PK>>
   --
-  ID Товара : BIGINT <<FK>>
-  Изображение : VARCHAR(100)
-  Подпись : VARCHAR(150)
+  ID Товара : bigint <<FK>>
+  Изображение : varchar
+  Подпись : varchar
 }
 
 entity "Мотоцикл" as Motorcycle {
-  ID Товара : BIGINT <<PK, FK>>
+  ID Товара : bigint <<PK, FK>>
   --
-  ID Категории мотоцикла : BIGINT <<FK>>
-  Год выпуска : INTEGER
-  Объём двигателя : INTEGER
-  Мощность : INTEGER
-  Масса : INTEGER
-  Цвет : VARCHAR(60)
+  ID Категории мотоцикла : bigint <<FK>>
+  Год выпуска : integer
+  Объём двигателя : integer
+  Мощность : integer
+  Масса : integer
+  Цвет : varchar
 }
 
 entity "Экипировка" as Equipment {
-  ID Товара : BIGINT <<PK, FK>>
+  ID Товара : bigint <<PK, FK>>
   --
-  ID Типа экипировки : BIGINT <<FK>>
-  Размер : VARCHAR(20)
-  Цвет : VARCHAR(40)
+  ID Типа экипировки : bigint <<FK>>
+  Размер : varchar
+  Цвет : varchar
 }
 
 entity "Тип экипировки" as EquipmentType {
-  ID : INTEGER <<PK>>
+  ID : integer <<PK>>
   --
-  Название : VARCHAR(100)
+  Название : varchar
 }
 
 entity "Масло" as Oil {
-  ID Товара : BIGINT <<PK, FK>>
+  ID Товара : bigint <<PK, FK>>
   --
-  Вязкость : VARCHAR(20)
-  Объём : INTEGER
+  Вязкость : varchar
+  Объём : integer
 }
 
 entity "Шина" as Tire {
-  ID Товара : BIGINT <<PK, FK>>
+  ID Товара : bigint <<PK, FK>>
   --
-  Диаметр : SMALLINT
+  Диаметр : smallint
 }
 
 entity "Запчасть" as Part {
-  ID Товара : BIGINT <<PK, FK>>
+  ID Товара : bigint <<PK, FK>>
   --
-  ID Типа запчасти : BIGINT <<FK>>
+  ID Типа запчасти : bigint <<FK>>
 }
 
 entity "Тип запчасти" as PartType {
-  ID : INTEGER <<PK>>
+  ID : integer <<PK>>
   --
-  Название : VARCHAR(100)
+  Название : varchar
 }
 
 entity "Аксессуар" as Accessory {
-  ID Товара : BIGINT <<PK, FK>>
+  ID Товара : bigint <<PK, FK>>
   --
-  ID Типа аксессуара : BIGINT <<FK>>
+  ID Типа аксессуара : bigint <<FK>>
 }
 
 entity "Тип аксессуара" as AccessoryType {
-  ID : INTEGER <<PK>>
+  ID : integer <<PK>>
   --
-  Название : VARCHAR(100)
+  Название : varchar
 }
 
 entity "Заказ" as Order {
-  ID : INTEGER <<PK>>
+  ID : integer <<PK>>
   --
-  ID Пользователя : INTEGER <<FK>>
-  ФИО : VARCHAR(150)
-  Телефон : VARCHAR(30)
-  Email : VARCHAR(254)
-  Адрес доставки : VARCHAR(255)
-  Комментарий : TEXT
-  Статус : VARCHAR(20)
-  Сумма : DECIMAL
-  Дата создания : DATETIME
+  ID Пользователя : integer <<FK>>
+  ФИО : varchar
+  Телефон : varchar
+  Email : varchar
+  Адрес доставки : varchar
+  Комментарий : text
+  Статус : varchar
+  Сумма : decimal
+  Дата создания : datetime
 }
 
 entity "Позиция заказа" as OrderItem {
-  ID : INTEGER <<PK>>
+  ID : integer <<PK>>
   --
-  ID Заказа : BIGINT <<FK>>
-  ID Товара : BIGINT <<FK>>
-  Название (снимок) : VARCHAR(255)
-  Цена : DECIMAL
-  Количество : INTEGER
+  ID Заказа : bigint <<FK>>
+  ID Товара : bigint <<FK>>
+  Название (снимок) : varchar
+  Цена : decimal
+  Количество : integer
 }
 
 entity "Пользователь" as User {
-  ID : INTEGER <<PK>>
+  ID : integer <<PK>>
 }
 
 entity "Профиль" as Profile {
-  ID : INTEGER <<PK>>
+  ID : integer <<PK>>
   --
-  ID Пользователя : INTEGER <<FK>>
-  ФИО : VARCHAR(150)
-  Телефон : VARCHAR(30)
-  Адрес : VARCHAR(255)
+  ID Пользователя : integer <<FK>>
+  ФИО : varchar
+  Телефон : varchar
+  Адрес : varchar
 }
 
 entity "Код подтверждения" as EmailConfirmation {
-  ID : INTEGER <<PK>>
+  ID : integer <<PK>>
   --
-  ID Пользователя : INTEGER <<FK>>
-  Код : VARCHAR(6)
-  Дата создания : DATETIME
+  ID Пользователя : integer <<FK>>
+  Код : varchar
+  Дата создания : datetime
 }
 
 entity "Резервирование" as CheckoutReservation {
-  ID : INTEGER <<PK>>
+  ID : integer <<PK>>
   --
-  ID Товара : BIGINT <<FK>>
-  Ключ сессии : VARCHAR(40)
-  Количество : INTEGER
-  Срок действия : DATETIME
-  Дата создания : DATETIME
+  ID Товара : bigint <<FK>>
+  Ключ сессии : varchar
+  Количество : integer
+  Срок действия : datetime
+  Дата создания : datetime
 }
 
 entity "Отзыв" as Review {
-  ID : INTEGER <<PK>>
+  ID : integer <<PK>>
   --
-  Имя автора : VARCHAR(100)
-  Оценка : SMALLINT
-  Текст : TEXT
-  Дата создания : DATETIME
+  Имя автора : varchar
+  Оценка : smallint
+  Текст : text
+  Дата создания : datetime
 }
 
 entity "Партнёр" as Partner {
-  ID : INTEGER <<PK>>
+  ID : integer <<PK>>
   --
-  Название : VARCHAR(100)
-  Логотип : VARCHAR(100)
+  Название : varchar
+  Логотип : varchar
 }
 
 Brand ||--o{ Product
